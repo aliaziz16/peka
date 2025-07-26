@@ -21,23 +21,21 @@ class MasterAuthController extends Controller
             'password' => 'required'
         ]);
 
-        $admin = MasterAdmin::where('email', $request->email)->first();
+        $credentials = $request->only('email', 'password');
 
-        if ($admin && Hash::check($request->password, $admin->password)) {
-            session([
-                'master_admin_id' => $admin->id,
-                'nama_master_admin' => $admin->name // ini baris tambahan
-            ]);
-
-            return redirect()->route('dashboard.master'); // sesuaikan dengan route dashboard kamu
+        if (Auth::guard('master_admin')->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->route('master.dashboard');
         }
 
         return back()->withErrors(['email' => 'Email atau password salah.']);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        session()->forget('master_admin_id');
+        Auth::guard('master_admin')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('master.login');
     }
 }

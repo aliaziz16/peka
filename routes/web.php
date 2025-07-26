@@ -31,12 +31,14 @@ Route::get('/master/login', [MasterAuthController::class, 'showLogin'])->name('m
 Route::post('/master/login', [MasterAuthController::class, 'login']);
 Route::get('/master/logout', [MasterAuthController::class, 'logout'])->name('master.logout');
 
-Route::get('/master/dashboard', [MasterAdminController::class, 'index'])->name('master.dashboard');
-Route::post('/master/admins', [MasterAdminController::class, 'store'])->name('master.admins.store');
-Route::put('/master/admins/{id}', [MasterAdminController::class, 'update'])->name('master.admins.update');
-Route::delete('/master/admins/{id}', [MasterAdminController::class, 'destroy'])->name('master.admins.destroy');
-Route::post('/master/admins/{id}/approve', [MasterAdminController::class, 'approve'])->name('master.admins.approve');
-Route::post('/master/admins/{id}/reject', [MasterAdminController::class, 'reject'])->name('master.admins.reject');
+Route::middleware(['auth.master'])->group(function () {
+    Route::get('/master/dashboard', [MasterAdminController::class, 'index'])->name('master.dashboard');
+    Route::post('/master/admins', [MasterAdminController::class, 'store'])->name('master.admins.store');
+    Route::put('/master/admins/{id}', [MasterAdminController::class, 'update'])->name('master.admins.update');
+    Route::delete('/master/admins/{id}', [MasterAdminController::class, 'destroy'])->name('master.admins.destroy');
+    Route::post('/master/admins/{id}/approve', [MasterAdminController::class, 'approve'])->name('master.admins.approve');
+    Route::post('/master/admins/{id}/reject', [MasterAdminController::class, 'reject'])->name('master.admins.reject');
+});
 
 
 // ========== ADMIN ==========

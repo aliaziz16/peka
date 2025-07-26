@@ -3,15 +3,23 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MasterAdminMiddleware
 {
-    public function handle($request, Closure $next)
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    public function handle(Request $request, Closure $next)
     {
-        // if (!Session::has('master_admin')) {
-        //     return redirect()->route('admin.login')->withErrors(['Silakan login sebagai Master Admin.']);
-        // }
+        if (!Auth::guard('master_admin')->check()) {
+            return redirect()->route('master.login')->withErrors(['Silakan login sebagai Master Admin.']);
+        }
 
         return $next($request);
     }

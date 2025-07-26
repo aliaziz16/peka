@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AdminAuthController extends Controller
 {
@@ -21,11 +22,12 @@ class AdminAuthController extends Controller
             'password' => 'required'
         ]);
 
-        $admin = Admin::where('email', $request->email)->where('status', 'approved')->first();
+        $credentials = $request->only('email', 'password');
+        $credentials['status'] = 'approved';
 
-        if ($admin && Hash::check($request->password, $admin->password)) {
-            session(['admin_id' => $admin->id]);
-            return redirect()->route('admin.dashboard'); // sesuaikan
+        if (Auth::guard('admin')->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->route('admin.dashboard');
         }
 
         return back()->withErrors(['email' => 'Email atau password salah, atau akun belum disetujui.']);
@@ -38,7 +40,7 @@ class AdminAuthController extends Controller
 
     public function handle(Request $request, Closure $next)
     {
-        if (!session()->has('admin_id')) {
+        if (!Auth::guard('admin')->check()) {
             return redirect()->route('admin.login');
         }
 
@@ -63,9 +65,11 @@ class AdminAuthController extends Controller
         return redirect()->route('admin.login')->with('success', 'Pendaftaran berhasil. Menunggu persetujuan Master Admin.');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        session()->forget('admin_id');
+        Auth::guard('admin')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('admin.login');
     }
 }

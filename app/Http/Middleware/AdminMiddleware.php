@@ -18,7 +18,14 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (!Auth::guard('admin')->check()) {
-            return redirect()->route('admin.login');
+            return redirect()->route('admin.login')->withErrors(['Silakan login sebagai Admin.']);
+        }
+
+        // Check if admin is approved
+        $admin = Auth::guard('admin')->user();
+        if ($admin && $admin->status !== 'approved') {
+            Auth::guard('admin')->logout();
+            return redirect()->route('admin.login')->withErrors(['Akun Anda belum disetujui oleh Master Admin.']);
         }
 
         return $next($request);
