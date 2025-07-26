@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartementController;
+use App\Http\Controllers\AdminDepartementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeaderController;
 use App\Http\Controllers\MasterAdminController;
@@ -62,4 +63,12 @@ Route::middleware(['auth.admin'])->group(function () {
     Route::get('/admin/categories/{id}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
     Route::put('/admin/categories/{id}', [CategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/admin/categories/{id}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+    
+    // Departement Management
+    Route::get('/admin/departements', [AdminDepartementController::class, 'index'])->name('admin.departements.index');
+    Route::get('/admin/departements/create', [AdminDepartementController::class, 'create'])->name('admin.departements.create');
+    Route::post('/admin/departements', [AdminDepartementController::class, 'store'])->name('admin.departements.store');
+    Route::get('/admin/departements/{id}/edit', [AdminDepartementController::class, 'edit'])->name('admin.departements.edit');
+    Route::put('/admin/departements/{id}', [AdminDepartementController::class, 'update'])->name('admin.departements.update');
+    Route::delete('/admin/departements/{id}', [AdminDepartementController::class, 'destroy'])->name('admin.departements.destroy');
 });
