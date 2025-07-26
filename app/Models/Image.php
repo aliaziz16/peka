@@ -10,12 +10,13 @@ class Image extends Model
     use HasFactory;
 
     protected $fillable = [
-        'post_id',
-        'image_path',
-        'caption',
+        'title',
+        'filename',
+        'path',
+        'alt_text',
+        'category',
+        'is_active',
     ];
-
-    public $timestamps = false;
 
     public function post()
     {

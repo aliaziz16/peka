@@ -6,6 +6,7 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\AdminDepartementController;
+use App\Http\Controllers\AdminLeaderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeaderController;
 use App\Http\Controllers\MasterAdminController;
@@ -71,4 +72,12 @@ Route::middleware(['auth.admin'])->group(function () {
     Route::get('/admin/departements/{id}/edit', [AdminDepartementController::class, 'edit'])->name('admin.departements.edit');
     Route::put('/admin/departements/{id}', [AdminDepartementController::class, 'update'])->name('admin.departements.update');
     Route::delete('/admin/departements/{id}', [AdminDepartementController::class, 'destroy'])->name('admin.departements.destroy');
+    
+    // Leader Management
+    Route::get('/admin/leaders', [AdminLeaderController::class, 'index'])->name('admin.leaders.index');
+    Route::get('/admin/leaders/create', [AdminLeaderController::class, 'create'])->name('admin.leaders.create');
+    Route::post('/admin/leaders', [AdminLeaderController::class, 'store'])->name('admin.leaders.store');
+    Route::get('/admin/leaders/{id}/edit', [AdminLeaderController::class, 'edit'])->name('admin.leaders.edit');
+    Route::put('/admin/leaders/{id}', [AdminLeaderController::class, 'update'])->name('admin.leaders.update');
+    Route::delete('/admin/leaders/{id}', [AdminLeaderController::class, 'destroy'])->name('admin.leaders.destroy');
 });
