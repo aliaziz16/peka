@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeaderController;
@@ -44,4 +45,21 @@ Route::post('/admin/register', [AdminAuthController::class, 'register']);
 Route::get('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-// tambah route admin lainnya di sini
+
+// Admin CRUD Routes
+Route::middleware(['auth.admin'])->group(function () {
+    Route::get('/admin/posts', [AdminController::class, 'index'])->name('admin.posts.index');
+    Route::get('/admin/posts/create', [AdminController::class, 'create'])->name('admin.posts.create');
+    Route::post('/admin/posts', [AdminController::class, 'store'])->name('admin.posts.store');
+    Route::get('/admin/posts/{id}/edit', [AdminController::class, 'edit'])->name('admin.posts.edit');
+    Route::put('/admin/posts/{id}', [AdminController::class, 'update'])->name('admin.posts.update');
+    Route::delete('/admin/posts/{id}', [AdminController::class, 'destroy'])->name('admin.posts.destroy');
+    
+    // Category Management
+    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::get('/admin/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
+    Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::get('/admin/categories/{id}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
+    Route::put('/admin/categories/{id}', [CategoryController::class, 'update'])->name('admin.categories.update');
+    Route::delete('/admin/categories/{id}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+});

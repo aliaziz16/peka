@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Category;
+use App\Models\Admin;
+use App\Models\MasterAdmin;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +15,32 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create default categories
+        $categories = [
+            ['name' => 'Berita Utama', 'description' => 'Berita utama organisasi'],
+            ['name' => 'Kegiatan', 'description' => 'Berita tentang kegiatan organisasi'],
+            ['name' => 'Pengumuman', 'description' => 'Pengumuman penting'],
+            ['name' => 'Artikel', 'description' => 'Artikel dan opini'],
+        ];
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        foreach ($categories as $category) {
+            Category::create($category);
+        }
+
+        // Create default master admin
+        MasterAdmin::create([
+            'name' => 'Master Admin',
+            'email' => 'master@admin.com',
+            'password' => Hash::make('password'),
+            'status' => 'approved',
+        ]);
+
+        // Create default admin
+        Admin::create([
+            'name' => 'Admin',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('password'),
+            'status' => 'approved',
         ]);
     }
 }
