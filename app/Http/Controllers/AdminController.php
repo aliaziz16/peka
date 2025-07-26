@@ -10,14 +10,14 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $posts = Post::with('category')->latest()->paginate(6);
-        return view('dashboard.admin', compact('posts'));
+        $posts = Post::with('category')->latest()->paginate(10);
+        return view('admin.posts.index', compact('posts'));
     }
 
     public function create()
     {
         $categories = Category::all();
-        return view('dashboard.form-post', compact('categories'));
+        return view('admin.posts.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -43,7 +43,7 @@ class AdminController extends Controller
     {
         $post = Post::findOrFail($id);
         $categories = Category::all();
-        return view('dashboard.form-post', compact('post', 'categories'));
+        return view('admin.posts.edit', compact('post', 'categories'));
     }
 
     public function update(Request $request, $id)

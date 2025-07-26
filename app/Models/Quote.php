@@ -12,6 +12,8 @@ class Quote extends Model
     protected $fillable = [
         'content',
         'author',
+        'source',
+        'is_active',
     ];
 
     public $timestamps = true; // created_at untuk menampilkan quote terbaru
